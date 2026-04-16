@@ -172,7 +172,7 @@ document.getElementById('btn-login').addEventListener('click', async () => {
   setStatus('login-status','info','Connexion en cours...');
   document.getElementById('btn-login').disabled = true;
   try {
-    const r = await callProxy('/login/', 'POST', { username, password, sync_family: 0, tfa_code: '' }, '');
+    const r = await callProxy('/login/', 'POST', { username, password, sync_family: 0 }, '');
     const data = await r.json();
     if (!r.ok) {
       setStatus('login-status','err', data.error_message || 'Identifiants incorrects.');
