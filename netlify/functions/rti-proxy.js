@@ -17,7 +17,12 @@ exports.handler = async function(event) {
   if (token) headers['Authorization'] = 'Token ' + token;
 
   const options = { method: method || 'GET', headers };
-  if (body && method === 'POST') options.body = JSON.stringify(body);
+  if (body && method === 'POST') {
+    const cleanBody = Object.fromEntries(
+      Object.entries(body).map(([k, v]) => [k, v === '' ? null : v])
+    );
+    options.body = JSON.stringify(cleanBody);
+  }
 
   try {
     const response = await fetch(BASE + path, options);
