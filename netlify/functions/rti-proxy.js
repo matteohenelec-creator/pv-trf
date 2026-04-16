@@ -10,8 +10,8 @@ exports.handler = async function(event) {
     return { statusCode: 400, body: 'Invalid JSON' };
   }
 
-  const { path, method, body, token } = payload;
-  const BASE = 'https://api.roundtable.world/v1/app';
+  const { path, method, body, token, baseUrl } = payload;
+  const BASE = baseUrl || 'https://api.roundtable.world/v1/app';
 
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = 'Token ' + token;
@@ -36,7 +36,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: e.message, detail: e.toString() })
+      body: JSON.stringify({ error: e.message })
     };
   }
 };
