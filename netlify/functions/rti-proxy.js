@@ -17,26 +17,26 @@ exports.handler = async function(event) {
   if (token) headers['Authorization'] = 'Token ' + token;
 
   const options = { method: method || 'GET', headers };
-  if (body && method === 'POST') {
-    const cleanBody = Object.fromEntries(
-      Object.entries(body).map(([k, v]) => [k, v === '' ? null : v])
-    );
-    options.body = JSON.stringify(cleanBody);
+  if (method === 'POST' && body) {
+    options.body = JSON.stringify(body);
   }
 
   try {
     const response = await fetch(BASE + path, options);
-    const data = await response.text();
+    const text = await response.text();
     return {
       statusCode: response.status,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: data
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: text
     };
   } catch(e) {
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: e.message })
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: e.message, detail: e.toString() })
     };
   }
 };
