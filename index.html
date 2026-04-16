@@ -53,9 +53,8 @@ input:focus, textarea:focus { outline: none; border-color: #c8102e; }
 /* PDF STYLES */
 #pv-preview { display: none; }
 @media print {
-  body * { visibility: hidden; }
-  #pv-preview, #pv-preview * { visibility: visible; }
-  #pv-preview { display: block !important; position: fixed; left: 0; top: 0; width: 100%; }
+  body > * { display: none !important; }
+  #pv-preview { display: block !important; }
 }
 #pv-preview {
   background: #fff;
@@ -319,7 +318,11 @@ window.addEventListener('load', () => {
   const u = localStorage.getItem('rti_username');
   if(t) document.getElementById('admin_token').value = t;
   if(u) document.getElementById('username').value = u;
-  if(t) { document.getElementById('step2').style.display='block'; setStatus('login-status','info','Token détecté. Entrez vos identifiants et chargez les données.'); }
+  if(t) { 
+    document.getElementById('page-connexion').style.display='none';
+    document.getElementById('page-token').style.display='block';
+    setStatus('login-status','info','Token détecté. Entrez vos identifiants et chargez les données.'); 
+  }
 });
 
 document.getElementById('btn-step1').addEventListener('click', async () => {
@@ -337,8 +340,8 @@ document.getElementById('btn-step1').addEventListener('click', async () => {
     const levels = await lr.json();
     const subdomain = levels.club?.subdomain;
     if(subdomain) document.getElementById('token-link').href = 'https://'+subdomain+'.roundtable.world/fr/admin/settings/api/token/';
-    document.getElementById('step1').style.display='none';
-    document.getElementById('step2').style.display='block';
+    document.getElementById('page-connexion').style.display='none';
+    document.getElementById('page-token').style.display='block';
     setStatus('login-status','info','Connecté ! Créez maintenant votre token RTI ci-dessous.');
   } catch(e) { setStatus('login-status','err','Erreur : '+e.message); document.getElementById('btn-step1').disabled=false; }
 });
@@ -424,6 +427,8 @@ async function loadAll() {
     const grid=document.getElementById('members-grid');
     grid.innerHTML=actifs.sort((a,b)=>a.last_name.localeCompare(b.last_name)).map(m=>`<label class="member-check" id="mc_${m.id}"><input type="checkbox" value="${m.first_name} ${m.last_name}" onchange="this.closest('label').classList.toggle('checked',this.checked)"/><span>${m.first_name} ${m.last_name}</span></label>`).join('');
 
+    document.getElementById('page-connexion').style.display='none';
+    document.getElementById('page-token').style.display='none';
     document.getElementById('club-card').classList.remove('hidden');
     document.getElementById('form-card').classList.remove('hidden');
     setStatus('login-status','ok','Toutes les données récupérées ! Vérifiez et complétez le formulaire.');
