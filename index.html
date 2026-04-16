@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Générateur PV AG — TRF (version préfecture)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; }
+  .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 24px; }
+  .card { background: #fff; border-radius: 10px; border: 1px solid #ddd; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 14px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .full { grid-column: 1 / -1; }
+  label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; }
+  input, select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: Arial, sans-serif; background: #fff; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #185FA5; }
+  .btn { padding: 10px 20px; border-radius: 7px; border: 1px solid #ccc; background: #fff; font-size: 14px; cursor: pointer; font-family: Arial, sans-serif; }
+  .btn:hover { background: #f0f0f0; }
+  .btn-primary { background: #185FA5; color: #fff; border-color: #185FA5; }
+  .btn-primary:hover { background: #0C447C; }
+  .btn-success { background: #2d6a0a; color: #fff; border-color: #2d6a0a; }
+  .btn-success:hover { background: #1e4a07; }
+  .btn-secondary { background: #555; color: #fff; border-color: #555; }
+  .btn-secondary:hover { background: #333; }
+  .status { padding: 10px 14px; border-radius: 7px; font-size: 13px; margin-bottom: 14px; }
+  .status-info { background: #e6f1fb; color: #0C447C; border: 1px solid #b5d4f4; }
+  .status-ok { background: #eaf3de; color: #2d6a0a; border: 1px solid #c0dd97; }
+  .status-err { background: #fcebeb; color: #a32d2d; border: 1px solid #f7c1c1; }
+  .flex-gap { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .hidden { display: none; }
+  .board-card { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eee; }
+  .board-card:last-child { border-bottom: none; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: #e6f1fb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #185FA5; flex-shrink: 0; }
+  .role-badge { font-size: 11px; background: #f0f0f0; color: #555; padding: 2px 8px; border-radius: 20px; }
+
+  /* PV styles */
+  #pv-output { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 32px; font-size: 14px; line-height: 2; font-family: "Times New Roman", serif; white-space: pre-wrap; }
+  .pv-actions { display: flex; gap: 10px; margin-bottom: 12px; }
+
+  @media print {
+    body { background: #fff; }
+    .container { padding: 0; max-width: 100%; }
+    .no-print { display: none !important; }
+    h1, .subtitle { display: none; }
+    .card { border: none; padding: 0; margin: 0; }
+    #pv-output { border: none; padding: 16px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Générateur PV AG — TRF (version préfecture)</h1>
+  <p class="subtitle">Connecté à RTI · Round Table · Remplis → Génère → Imprime en PDF</p>
+
+  <!-- LOGIN -->
+  <div class="card no-print" id="login-card">
+    <div class="card-title">Connexion RTI</div>
+    <div id="login-status" class="status status-info">Entrez vos identifiants RTI pour récupérer automatiquement les données de votre club.</div>
+    <div class="row">
+      <div><label>Nom d'utilisateur</label><input type="text" id="username" placeholder="ex: JeanDupont" /></div>
+      <div><label>Mot de passe</label><input type="password" id="password" placeholder="••••••••" /></div>
+    </div>
+    <div class="flex-gap">
+      <button class="btn btn-primary" id="btn-login">Se connecter à RTI</button>
+    </div>
+  </div>
+
+  <!-- CLUB INFO -->
+  <div class="card no-print hidden" id="club-card">
+    <div class="card-title">Club récupéré depuis RTI</div>
+    <div id="club-info"></div>
+    <div style="margin-top:14px">
+      <div class="card-title">Bureau</div>
+      <div id="board-info"></div>
+    </div>
+  </div>
+
+  <!-- FORMULAIRE -->
+  <div class="card no-print hidden" id="form-card">
+    <div class="card-title">Informations complémentaires</div>
+
+    <div class="row">
+      <div><label>Numéro RNA *</label><input type="text" id="rna" placeholder="W123456789" /></div>
+      <div><label>Date de l'AG *</label><input type="date" id="date_ag" /></div>
+    </div>
+    <div class="row">
+      <div><label>Lieu (nom de la salle) *</label><input type="text" id="lieu_nom" placeholder="Salle des fêtes de la Mairie" /></div>
+      <div><label>Adresse du lieu *</label><input type="text" id="lieu_adresse" placeholder="1 place de la République, 75001 Paris" /></div>
+    </div>
+    <div class="row">
+      <div><label>Heure *</label><input type="time" id="heure" value="20:00" /></div>
+      <div><label>Président de séance *</label><input type="text" id="president_seance" placeholder="Prénom Nom" /></div>
+    </div>
+    <div class="row">
+      <div><label>Secrétaire de séance *</label><input type="text" id="secretaire_seance" placeholder="Prénom Nom" /></div>
+      <div><label>Total membres actifs *</label><input type="number" id="total_membres" placeholder="20" /></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label>Membres présents * (séparés par des virgules)</label>
+      <textarea id="membres_presents" rows="3" placeholder="Jean Dupont, Marie Martin, Pierre Durand..."></textarea>
+    </div>
+
+    <div class="card-title" style="margin-top:16px">AG Nationale (préfecture)</div>
+    <div class="row">
+      <div><label>Lieu AG nationale *</label><input type="text" id="lieu_ag_nat" placeholder="ex: Saint-Gilles-les-Bains" /></div>
+      <div><label>Date AG nationale *</label><input type="date" id="date_ag_nat" /></div>
+    </div>
+
+    <div class="card-title" style="margin-top:16px">Bureau élu (pré-rempli depuis RTI — modifiable)</div>
+
+    <div id="bureau-fields">
+      <div class="row-3">
+        <div><label>Président — Nom Prénom</label><input type="text" id="b_pres_nom" /></div>
+        <div><label>Profession</label><input type="text" id="b_pres_prof" /></div>
+        <div><label>Nationalité</label><input type="text" id="b_pres_nat" value="Française" /></div>
+      </div>
+      <div style="margin-bottom:12px"><label>Adresse</label><input type="text" id="b_pres_addr" /></div>
+
+      <div class="row-3">
+        <div><label>Vice-Président — Nom Prénom</label><input type="text" id="b_vp_nom" /></div>
+        <div><label>Profession</label><input type="text" id="b_vp_prof" /></div>
+        <div><label>Nationalité</label><input type="text" id="b_vp_nat" value="Française" /></div>
+      </div>
+      <div style="margin-bottom:12px"><label>Adresse</label><input type="text" id="b_vp_addr" /></div>
+
+      <div class="row-3">
+        <div><label>Trésorier — Nom Prénom</label><input type="text" id="b_tres_nom" /></div>
+        <div><label>Profession</label><input type="text" id="b_tres_prof" /></div>
+        <div><label>Nationalité</label><input type="text" id="b_tres_nat" value="Française" /></div>
+      </div>
+      <div style="margin-bottom:12px"><label>Adresse</label><input type="text" id="b_tres_addr" /></div>
+
+      <div class="row-3">
+        <div><label>Secrétaire — Nom Prénom</label><input type="text" id="b_sec_nom" /></div>
+        <div><label>Profession</label><input type="text" id="b_sec_prof" /></div>
+        <div><label>Nationalité</label><input type="text" id="b_sec_nat" value="Française" /></div>
+      </div>
+      <div style="margin-bottom:16px"><label>Adresse</label><input type="text" id="b_sec_addr" /></div>
+    </div>
+
+    <div class="flex-gap">
+      <button class="btn btn-success" id="btn-generate">Générer le PV</button>
+    </div>
+  </div>
+
+  <!-- PV GÉNÉRÉ -->
+  <div class="hidden" id="pv-card">
+    <div class="pv-actions no-print">
+      <button class="btn btn-primary" onclick="window.print()">Imprimer / Télécharger en PDF</button>
+      <button class="btn btn-secondary" onclick="copyPV()">Copier le texte</button>
+    </div>
+    <div id="pv-output"></div>
+  </div>
+</div>
+
+<script>
+const BASE = 'https://api.roundtable.world/v1/app';
+let globalToken = '';
+let boardData = [];
+let clubData = null;
+
+function setStatus(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = 'status status-' + (type === 'ok' ? 'ok' : type === 'err' ? 'err' : 'info');
+  el.textContent = msg;
+}
+
+function initials(fn, ln) {
+  return ((fn || '?')[0] + (ln || '?')[0]).toUpperCase();
+}
+
+async function apiPost(path, body, token) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Token ' + token;
+  return fetch(BASE + path, { method: 'POST', headers, body: JSON.stringify(body) });
+}
+
+async function apiGet(path, token) {
+  return fetch(BASE + path, { headers: { 'Authorization': 'Token ' + token } });
+}
+
+document.getElementById('btn-login').addEventListener('click', async () => {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (!username || !password) { setStatus('login-status', 'err', 'Veuillez saisir vos identifiants.'); return; }
+  setStatus('login-status', 'info', 'Connexion en cours...');
+  document.getElementById('btn-login').disabled = true;
+  try {
+    const r = await apiPost('/login/', { username, password, sync_family: 0, tfa_code: '' });
+    const data = await r.json();
+    if (!r.ok) {
+      setStatus('login-status', 'err', data.error_message || 'Identifiants incorrects.');
+      document.getElementById('btn-login').disabled = false;
+      return;
+    }
+    globalToken = data.global_auth_token;
+    setStatus('login-status', 'ok', 'Connecté ! Récupération des données du club...');
+    await loadClub();
+  } catch (e) {
+    setStatus('login-status', 'err', 'Erreur réseau : ' + e.message);
+    document.getElementById('btn-login').disabled = false;
+  }
+});
+
+async function loadClub() {
+  try {
+    const lr = await apiGet('/my-levels/', globalToken);
+    const levels = await lr.json();
+    const club = levels.club;
+    clubData = club;
+
+    const dr = await apiGet('/directory/' + club.id + '/', globalToken);
+    const dir = await dr.json();
+    boardData = dir.board || [];
+
+    // Afficher club
+    document.getElementById('club-info').innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px">
+        ${club.logo ? `<img src="${club.logo}" style="width:48px;height:48px;border-radius:8px;object-fit:contain;border:1px solid #eee"/>` : ''}
+        <div>
+          <div style="font-size:16px;font-weight:bold">${club.name}</div>
+          <div style="font-size:13px;color:#888">${club.path || ''}</div>
+        </div>
+      </div>`;
+
+    document.getElementById('board-info').innerHTML = boardData.length === 0
+      ? '<span style="font-size:13px;color:#888">Aucun membre du bureau trouvé dans RTI.</span>'
+      : boardData.map(m => `
+        <div class="board-card">
+          <div class="avatar">${initials(m.first_name, m.last_name)}</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:bold">${m.first_name || ''} ${m.last_name || ''}</div>
+            <div style="font-size:12px;color:#888">${m.function_name || ''}</div>
+          </div>
+        </div>`).join('');
+
+    // Pré-remplir bureau
+    const find = (regex, exclude) => boardData.find(m => {
+      const fn = (m.function_name || '').toLowerCase();
+      return regex.test(fn) && (!exclude || !exclude.test(fn));
+    });
+    const pres  = find(/pr[eé]sident/, /vice/);
+    const vp    = find(/vice/);
+    const tres  = find(/tr[eé]sorier/);
+    const sec   = find(/secr[eé]taire/);
+
+    const fill = (m, prefix) => {
+      if (!m) return;
+      document.getElementById(prefix + '_nom').value = (m.first_name || '') + ' ' + (m.last_name || '');
+    };
+    fill(pres, 'b_pres'); fill(vp, 'b_vp'); fill(tres, 'b_tres'); fill(sec, 'b_sec');
+
+    // Pré-remplir séance
+    if (pres) document.getElementById('president_seance').value = (pres.first_name || '') + ' ' + (pres.last_name || '');
+    if (sec)  document.getElementById('secretaire_seance').value = (sec.first_name || '') + ' ' + (sec.last_name || '');
+
+    document.getElementById('date_ag').value = new Date().toISOString().split('T')[0];
+
+    document.getElementById('club-card').classList.remove('hidden');
+    document.getElementById('form-card').classList.remove('hidden');
+    setStatus('login-status', 'ok', 'Données récupérées avec succès. Complétez le formulaire ci-dessous.');
+  } catch (e) {
+    setStatus('login-status', 'err', 'Erreur lors de la récupération : ' + e.message);
+    document.getElementById('btn-login').disabled = false;
+  }
+}
+
+// Conversion nombre → lettres (français)
+function toLettre(n) {
+  const u = ['','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'];
+  const d = ['','','vingt','trente','quarante','cinquante','soixante','soixante','quatre-vingt','quatre-vingt'];
+  if (n === 0) return 'zéro';
+  if (n < 20) return u[n];
+  const t = Math.floor(n / 10), r = n % 10;
+  if (t === 7 || t === 9) return d[t] + '-' + u[10 + r];
+  if (r === 1 && t !== 8) return d[t] + '-et-un';
+  if (r === 0) return d[t] + (t === 8 ? 's' : '');
+  return d[t] + '-' + u[r];
+}
+
+function dateEnLettres(str) {
+  const mois = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const [y, m, j] = str.split('-').map(Number);
+  const annee = 'deux mille ' + (y > 2000 ? toLettre(y - 2000) : '');
+  return { jour: toLettre(j), mois: mois[m - 1], annee: annee.trim(), anneeRaw: y };
+}
+
+function heureEnLettres(str) {
+  const h = parseInt(str.split(':')[0]);
+  return toLettre(h) + ' heures';
+}
+
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+document.getElementById('btn-generate').addEventListener('click', () => {
+  const g = id => document.getElementById(id).value.trim();
+  const rna = g('rna'), date_ag = g('date_ag'), lieu_nom = g('lieu_nom');
+  const lieu_addr = g('lieu_adresse'), heure = g('heure');
+  const pres_seance = g('president_seance'), sec_seance = g('secretaire_seance');
+  const total = g('total_membres'), presents = g('membres_presents');
+  const lieu_nat = g('lieu_ag_nat'), date_nat = g('date_ag_nat');
+
+  if (!rna || !date_ag || !lieu_nom || !lieu_addr || !pres_seance || !sec_seance || !total || !presents || !lieu_nat || !date_nat) {
+    alert('Veuillez remplir tous les champs obligatoires (*).');
+    return;
+  }
+
+  const d  = dateEnLettres(date_ag);
+  const dn = dateEnLettres(date_nat);
+  const h  = heureEnLettres(heure);
+
+  const trNum  = (clubData && clubData.name.match(/\d+/)) ? clubData.name.match(/\d+/)[0] : '???';
+  const trVille = clubData ? clubData.name.replace(/table ronde française?/i, '').replace(/n°?\s*\d+/i, '').replace(/[-–]/g, '').trim() : '???';
+
+  const bPres = g('b_pres_nom'); const bPresProf = g('b_pres_prof'); const bPresAddr = g('b_pres_addr'); const bPresNat = g('b_pres_nat');
+  const bVP   = g('b_vp_nom');   const bVPProf   = g('b_vp_prof');   const bVPAddr   = g('b_vp_addr');   const bVPNat   = g('b_vp_nat');
+  const bTres = g('b_tres_nom'); const bTresProf = g('b_tres_prof'); const bTresAddr = g('b_tres_addr'); const bTresNat = g('b_tres_nat');
+  const bSec  = g('b_sec_nom');  const bSecProf  = g('b_sec_prof');  const bSecAddr  = g('b_sec_addr');  const bSecNat  = g('b_sec_nat');
+
+  const pv = `L'An ${cap(d.annee)},
+
+Le ${cap(d.jour)} ${d.mois},
+
+A ${cap(h)},
+
+les membres de la Table Ronde Française n° ${trNum} – ${trVille} sont réunis à ${lieu_nom}, ${lieu_addr}, conformément aux dispositions des statuts.
+
+Il a été dressé une feuille de présence qui a été signée par chaque membre présent, au moment de son entrée en séance, tant à titre personnel qu'en qualité éventuelle de mandataire.
+
+Monsieur ${pres_seance} préside la séance en sa qualité de Président de l'association.
+
+Monsieur ${sec_seance} est désigné secrétaire de séance.
+
+Le Président constate que tous les membres sont présents, soit au moins trois quarts des membres actifs (${total} membres actifs au total), et qu'en conséquence l'assemblée peut valablement délibérer.
+
+Membres présents : ${presents}.
+
+Le Président dépose sur le bureau de l'assemblée et met à la disposition de ses membres :
+    - les statuts de l'association ;
+    - un exemplaire de la convocation de l'assemblée ;
+    - les candidatures reçues pour les postes à pourvoir au sein du bureau ;
+    - la feuille de présence certifiée exacte ;
+    - le numéro RNA de l'association : ${rna}.
+
+Le Président déclare que tous les documents devant, d'après les dispositions légales, statutaires ou réglementaires, être communiqués aux membres de l'association avant la tenue de l'assemblée, l'ont été dans les délais imposés, ce dont l'assemblée lui donne acte.
+
+Le Président rappelle que les mandats des membres du bureau actuel de l'association arrivent à échéance au terme de l'assemblée générale de la Table Ronde Française prévue à ${lieu_nat} le ${dn.jour} ${dn.mois} ${dn.annee}, qu'il a reçu les candidatures de différents Tablers aux postes à pourvoir, et qu'il convient que la présente assemblée procède aux élections conformément aux articles 19 et 20 des statuts de la Table Ronde.
+
+RÉSOLUTIONS
+
+Première résolution — Élection du bureau
+
+L'assemblée procède au vote pour l'élection des membres du nouveau bureau. Après dépouillement du scrutin, sont élus à l'unanimité des membres présents :
+
+Président :
+    Nom et Prénom   : ${bPres || '___________'}
+    Profession      : ${bPresProf || '___________'}
+    Adresse         : ${bPresAddr || '___________'}
+    Nationalité     : ${bPresNat || 'Française'}
+
+Vice-Président :
+    Nom et Prénom   : ${bVP || '___________'}
+    Profession      : ${bVPProf || '___________'}
+    Adresse         : ${bVPAddr || '___________'}
+    Nationalité     : ${bVPNat || 'Française'}
+
+Trésorier :
+    Nom et Prénom   : ${bTres || '___________'}
+    Profession      : ${bTresProf || '___________'}
+    Adresse         : ${bTresAddr || '___________'}
+    Nationalité     : ${bTresNat || 'Française'}
+
+Secrétaire :
+    Nom et Prénom   : ${bSec || '___________'}
+    Profession      : ${bSecProf || '___________'}
+    Adresse         : ${bSecAddr || '___________'}
+    Nationalité     : ${bSecNat || 'Française'}
+
+Cette résolution est adoptée à l'unanimité.
+
+L'ordre du jour étant épuisé, la séance est levée.
+
+Fait à ${lieu_nom}, le ${d.jour} ${d.mois} ${d.annee}.
+
+
+Le Président de séance,                              Le Secrétaire de séance,
+
+
+
+${pres_seance}                                       ${sec_seance}`;
+
+  document.getElementById('pv-output').textContent = pv;
+  document.getElementById('pv-card').classList.remove('hidden');
+  document.getElementById('pv-card').scrollIntoView({ behavior: 'smooth' });
+});
+
+function copyPV() {
+  const txt = document.getElementById('pv-output').textContent;
+  navigator.clipboard.writeText(txt).then(() => alert('PV copié dans le presse-papiers !'));
+}
+</script>
+</body>
+</html>
