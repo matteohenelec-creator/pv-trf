@@ -112,32 +112,60 @@ input:focus, textarea:focus { outline: none; border-color: #c8102e; }
     <strong>⚠️ Important :</strong> Assurez-vous que le bureau et les profils membres sont à jour sur RTI avant de générer le PV.
   </div>
 
-  <!-- LOGIN -->
-  <div class="card no-print" id="login-card">
-    <div class="card-title">Connexion RTI</div>
-    <div id="login-status" class="status status-info">Entrez vos identifiants RTI pour vous connecter.</div>
-    <div id="step1">
-      <div class="row">
-        <div><label>Nom d'utilisateur</label><input type="text" id="username" placeholder="ex: JeanDupont"/></div>
-        <div><label>Mot de passe</label><input type="password" id="password" placeholder="••••••••"/></div>
+  <!-- PAGE 1 : CONNEXION -->
+  <div id="page-connexion">
+    <div style="max-width:460px;margin:0 auto;padding:32px 16px">
+      <div style="text-align:center;margin-bottom:28px">
+        <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/3/3e/Logo_Table_Ronde_Fran%C3%A7aise.svg/200px-Logo_Table_Ronde_Fran%C3%A7aise.svg.png" style="height:72px;margin-bottom:14px" onerror="this.style.display='none'"/>
+        <h2 style="font-size:20px;font-weight:bold;color:#c8102e;margin-bottom:4px">Générateur PV AG</h2>
+        <p style="font-size:13px;color:#888">Table Ronde Française — Version Préfecture</p>
       </div>
-      <button class="btn btn-primary" id="btn-step1">Se connecter &#8594;</button>
+      <div style="background:#fff;border-radius:12px;border:1px solid #ddd;padding:24px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:26px;height:26px;border-radius:50%;background:#c8102e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;flex-shrink:0">1</div>
+          <span style="font-size:14px;font-weight:bold">Connectez-vous avec vos identifiants RTI</span>
+        </div>
+        <div id="login-status" class="status status-info">Entrez votre nom d'utilisateur et mot de passe RTI.</div>
+        <div style="margin-bottom:12px"><label>Nom d'utilisateur</label><input type="text" id="username" placeholder="ex: JeanDupont"/></div>
+        <div style="margin-bottom:16px"><label>Mot de passe</label><input type="password" id="password" placeholder=""/></div>
+        <button class="btn btn-primary" id="btn-step1" style="width:100%">Se connecter</button>
+      </div>
     </div>
-    <div id="step2" style="display:none;margin-top:14px">
-      <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#2d6a0a">
-        &#10003; Connecté ! Créez maintenant votre token admin pour récupérer toutes les données.
+  </div>
+
+  <!-- PAGE 2 : TOKEN -->
+  <div id="page-token" style="display:none">
+    <div style="max-width:500px;margin:0 auto;padding:32px 16px">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#eaf3de;border:2px solid #c0dd97;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px;color:#2d6a0a">V</div>
+        <h2 style="font-size:18px;font-weight:bold;color:#2d6a0a;margin-bottom:4px">Connexion reussie !</h2>
+        <p style="font-size:13px;color:#888">Une derniere etape pour acceder a toutes vos donnees.</p>
       </div>
-      <div style="background:#fff5f6;border:1px solid #f5a0ae;border-radius:8px;padding:14px 16px;margin-bottom:14px;font-size:13px">
-        <strong>Étape 2 — Créez votre token RTI :</strong><br><br>
-        <a id="token-link" href="#" target="_blank" style="display:inline-block;background:#c8102e;color:#fff;padding:10px 18px;border-radius:7px;text-decoration:none;font-size:14px;margin-bottom:10px">Ouvrir ma page API RTI &#8594;</a><br>
-        <span style="color:#888">Sur la page qui s'ouvre : cliquez <strong>"Créer un token"</strong>, copiez-le et collez-le ci-dessous.</span>
+      <div style="background:#fff;border-radius:12px;border:1px solid #ddd;padding:24px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <div style="width:26px;height:26px;border-radius:50%;background:#c8102e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;flex-shrink:0">2</div>
+          <span style="font-size:14px;font-weight:bold">Creez votre token administrateur RTI</span>
+        </div>
+        <div style="background:#f9f9f9;border-radius:8px;padding:14px;margin-bottom:14px;font-size:13px;line-height:2;color:#444">
+          <strong>Instructions :</strong><br>
+          1. Cliquez sur le bouton rouge ci-dessous<br>
+          2. Sur la page qui s'ouvre, cliquez "Creer un token"<br>
+          3. Copiez le token genere et collez-le ci-dessous<br>
+          <span style="font-size:11px;color:#aaa">Le token sera sauvegarde pour les prochaines fois</span>
+        </div>
+        <a id="token-link" href="#" target="_blank" style="display:block;text-align:center;background:#c8102e;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:bold;margin-bottom:16px">
+          Ouvrir ma page API RTI
+        </a>
+        <div style="margin-bottom:16px">
+          <label>Coller le token ici *</label>
+          <input type="password" id="admin_token" placeholder="ex: acc75cd151bb90ff..."/>
+          <div style="font-size:11px;color:#aaa;margin-top:4px">Sauvegarde automatiquement dans votre navigateur</div>
+        </div>
+        <button class="btn btn-success" id="btn-login" style="width:100%">Charger mes donnees RTI</button>
+        <div style="text-align:center;margin-top:12px">
+          <span onclick="document.getElementById('page-token').style.display='none';document.getElementById('page-connexion').style.display='block';" style="font-size:12px;color:#888;cursor:pointer;text-decoration:underline">Retour</span>
+        </div>
       </div>
-      <div style="margin-bottom:14px">
-        <label>Token admin RTI</label>
-        <input type="password" id="admin_token" placeholder="Collez votre token ici..."/>
-        <div style="font-size:12px;color:#888;margin-top:4px">&#10003; Sauvegardé automatiquement dans votre navigateur.</div>
-      </div>
-      <button class="btn btn-success" id="btn-login">Charger les données RTI &#8594;</button>
     </div>
   </div>
 
