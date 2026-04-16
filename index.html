@@ -17,78 +17,139 @@ h1 { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
 .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; }
 input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: Arial, sans-serif; background: #fff; color: #222; }
-input:focus, textarea:focus { outline: none; border-color: #185FA5; }
-.auto-tag { font-size: 10px; background: #e6f1fb; color: #185FA5; border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
+input:focus, textarea:focus { outline: none; border-color: #c8102e; }
+.auto-tag { font-size: 10px; background: #fde8eb; color: #c8102e; border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
 .btn { padding: 10px 20px; border-radius: 7px; border: 1px solid #ccc; background: #fff; font-size: 14px; cursor: pointer; font-family: Arial, sans-serif; }
 .btn:hover { background: #f0f0f0; }
-.btn-primary { background: #185FA5; color: #fff; border-color: #185FA5; }
-.btn-primary:hover { background: #0C447C; }
+.btn-primary { background: #c8102e; color: #fff; border-color: #c8102e; }
+.btn-primary:hover { background: #a00d24; }
 .btn-success { background: #2d6a0a; color: #fff; border-color: #2d6a0a; }
 .btn-success:hover { background: #1e4a07; }
 .btn-secondary { background: #555; color: #fff; border-color: #555; }
+.btn-outline { background: #fff; color: #c8102e; border-color: #c8102e; }
+.btn-outline:hover { background: #fde8eb; }
 .status { padding: 10px 14px; border-radius: 7px; font-size: 13px; margin-bottom: 14px; }
-.status-info { background: #e6f1fb; color: #0C447C; border: 1px solid #b5d4f4; }
+.status-info { background: #fde8eb; color: #a00d24; border: 1px solid #f5a0ae; }
 .status-ok { background: #eaf3de; color: #2d6a0a; border: 1px solid #c0dd97; }
 .status-err { background: #fcebeb; color: #a32d2d; border: 1px solid #f7c1c1; }
 .flex-gap { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .hidden { display: none; }
 .board-card { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eee; }
 .board-card:last-child { border-bottom: none; }
-.avatar { width: 36px; height: 36px; border-radius: 50%; background: #e6f1fb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #185FA5; flex-shrink: 0; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: #fde8eb; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #c8102e; flex-shrink: 0; }
 .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; margin-top: 8px; }
 .member-check { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 13px; background: #fff; }
-.member-check:hover { background: #f0f5ff; }
-.member-check input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }
-.member-check.checked { background: #e6f1fb; border-color: #185FA5; }
+.member-check:hover { background: #fff5f6; }
+.member-check input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #c8102e; }
+.member-check.checked { background: #fde8eb; border-color: #c8102e; }
 .select-btns { display: flex; gap: 8px; margin-bottom: 10px; }
 .select-btns button { font-size: 12px; padding: 4px 12px; border-radius: 5px; border: 1px solid #ccc; background: #fff; cursor: pointer; }
 .select-btns button:hover { background: #f0f0f0; }
-.token-help { font-size: 12px; color: #888; margin-top: 6px; line-height: 1.6; background: #f9f9f9; border-radius: 6px; padding: 8px 10px; }
-#pv-output { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 40px; font-size: 14px; line-height: 2.2; font-family: "Times New Roman", serif; white-space: pre-wrap; }
+.sig-box { border: 2px dashed #ccc; border-radius: 8px; background: #fafafa; position: relative; cursor: crosshair; display: block; touch-action: none; }
+.sig-box:hover { border-color: #c8102e; }
+.sig-label { font-size: 12px; color: #999; margin-bottom: 6px; }
+.sig-clear { font-size: 11px; color: #c8102e; cursor: pointer; text-decoration: underline; margin-top: 4px; display: inline-block; }
+
+/* PDF STYLES */
+#pv-preview { display: none; }
 @media print {
-  body { background: #fff; }
-  .container { padding: 0; max-width: 100%; }
-  .no-print { display: none !important; }
-  #pv-output { border: none; padding: 20px; font-size: 13px; }
+  body * { visibility: hidden; }
+  #pv-preview, #pv-preview * { visibility: visible; }
+  #pv-preview { display: block !important; position: fixed; left: 0; top: 0; width: 100%; }
 }
+#pv-preview {
+  background: #fff;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 12pt;
+  line-height: 1.8;
+  color: #1a1a1a;
+  padding: 0;
+}
+.pv-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 20mm 20mm 15mm 20mm;
+  background: white;
+  position: relative;
+}
+.pv-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid #c8102e;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.pv-header-left { display: flex; align-items: center; gap: 14px; }
+.pv-header-logo { width: 70px; height: 70px; object-fit: contain; }
+.pv-header-title { }
+.pv-header-title h2 { font-size: 16pt; font-weight: bold; color: #c8102e; margin: 0; font-family: Arial, sans-serif; }
+.pv-header-title p { font-size: 9pt; color: #555; margin: 2px 0 0; font-family: Arial, sans-serif; }
+.pv-header-right { text-align: right; font-size: 9pt; color: #555; font-family: Arial, sans-serif; }
+.pv-header-right strong { display: block; font-size: 10pt; color: #222; }
+.pv-doc-title { text-align: center; margin: 16px 0 20px; }
+.pv-doc-title h1 { font-size: 14pt; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; color: #1a1a1a; border: 2px solid #c8102e; display: inline-block; padding: 6px 24px; font-family: Arial, sans-serif; }
+.pv-body p { margin-bottom: 12px; text-align: justify; }
+.pv-body .section-title { font-weight: bold; text-decoration: underline; margin: 20px 0 8px; font-size: 11pt; }
+.pv-bureau-table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 10pt; }
+.pv-bureau-table td { padding: 4px 8px; border: 1px solid #ddd; }
+.pv-bureau-table td:first-child { font-weight: bold; width: 35%; background: #f9f9f9; }
+.pv-resolution { background: #f9f9f9; border-left: 4px solid #c8102e; padding: 10px 14px; margin: 12px 0; font-size: 11pt; }
+.pv-signatures { display: flex; justify-content: space-between; margin-top: 32px; gap: 20px; }
+.pv-sig-block { flex: 1; text-align: center; }
+.pv-sig-block p { font-size: 10pt; font-weight: bold; margin-bottom: 6px; font-family: Arial, sans-serif; }
+.pv-sig-block img { max-width: 180px; max-height: 70px; display: block; margin: 0 auto; }
+.pv-sig-line { border-top: 1px solid #999; margin-top: 4px; padding-top: 4px; font-size: 9pt; color: #555; font-family: Arial, sans-serif; }
+.pv-footer { border-top: 1px solid #ddd; margin-top: 20px; padding-top: 8px; font-size: 8pt; color: #888; text-align: center; font-family: Arial, sans-serif; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Générateur PV AG — TRF (version préfecture)</h1>
-  <p class="subtitle">Connecté à RTI · Round Table · Remplis → Génère → Imprime en PDF</p>
+  <p class="subtitle">Connecté à RTI · Round Table · Remplis → Signe → Imprime en PDF</p>
 
   <div class="alert no-print">
-    <strong>⚠️ Important avant utilisation :</strong> Les données sont récupérées automatiquement depuis RTI (rti.roundtable.world). Assurez-vous que le bureau et les profils des membres sont bien à jour sur RTI avant de générer le PV. Toutes les données pré-remplies restent modifiables.
+    <strong>⚠️ Important :</strong> Assurez-vous que le bureau et les profils membres sont à jour sur RTI avant de générer le PV.
   </div>
 
+  <!-- LOGIN -->
   <div class="card no-print" id="login-card">
     <div class="card-title">Connexion RTI</div>
-    <div id="login-status" class="status status-info">Entrez vos identifiants RTI et votre token admin pour récupérer toutes les données automatiquement.</div>
-    <div class="row">
-      <div><label>Nom d'utilisateur</label><input type="text" id="username" placeholder="ex: JeanDupont"/></div>
-      <div><label>Mot de passe</label><input type="password" id="password" placeholder="••••••••"/></div>
-    </div>
-    <div style="margin-bottom:14px">
-      <label>Token admin RTI</label>
-      <input type="password" id="admin_token" placeholder="Votre token admin RTI"/>
-      <div class="token-help">
-        <strong>Où trouver votre token :</strong> Connectez-vous sur RTI → cliquez sur <strong>Gestion</strong> (en haut à droite) → <strong>Paramètres</strong> → <strong>API</strong> → <strong>Créer un token</strong><br>
-        ✅ Le token est automatiquement sauvegardé dans votre navigateur pour les prochaines fois.
+    <div id="login-status" class="status status-info">Entrez vos identifiants RTI pour vous connecter.</div>
+    <div id="step1">
+      <div class="row">
+        <div><label>Nom d'utilisateur</label><input type="text" id="username" placeholder="ex: JeanDupont"/></div>
+        <div><label>Mot de passe</label><input type="password" id="password" placeholder="••••••••"/></div>
       </div>
+      <button class="btn btn-primary" id="btn-step1">Se connecter &#8594;</button>
     </div>
-    <button class="btn btn-primary" id="btn-login">Se connecter à RTI</button>
+    <div id="step2" style="display:none;margin-top:14px">
+      <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#2d6a0a">
+        &#10003; Connecté ! Créez maintenant votre token admin pour récupérer toutes les données.
+      </div>
+      <div style="background:#fff5f6;border:1px solid #f5a0ae;border-radius:8px;padding:14px 16px;margin-bottom:14px;font-size:13px">
+        <strong>Étape 2 — Créez votre token RTI :</strong><br><br>
+        <a id="token-link" href="#" target="_blank" style="display:inline-block;background:#c8102e;color:#fff;padding:10px 18px;border-radius:7px;text-decoration:none;font-size:14px;margin-bottom:10px">Ouvrir ma page API RTI &#8594;</a><br>
+        <span style="color:#888">Sur la page qui s'ouvre : cliquez <strong>"Créer un token"</strong>, copiez-le et collez-le ci-dessous.</span>
+      </div>
+      <div style="margin-bottom:14px">
+        <label>Token admin RTI</label>
+        <input type="password" id="admin_token" placeholder="Collez votre token ici..."/>
+        <div style="font-size:12px;color:#888;margin-top:4px">&#10003; Sauvegardé automatiquement dans votre navigateur.</div>
+      </div>
+      <button class="btn btn-success" id="btn-login">Charger les données RTI &#8594;</button>
+    </div>
   </div>
 
+  <!-- CLUB -->
   <div class="card no-print hidden" id="club-card">
     <div class="card-title">Club récupéré depuis RTI</div>
     <div id="club-info"></div>
-    <div style="margin-top:14px">
-      <div class="card-title">Bureau actuel</div>
-      <div id="board-info"></div>
-    </div>
+    <div style="margin-top:14px"><div class="card-title">Bureau actuel</div><div id="board-info"></div></div>
   </div>
 
+  <!-- FORMULAIRE -->
   <div class="card no-print hidden" id="form-card">
     <div class="card-title">Informations de l'AG</div>
     <div class="row">
@@ -96,90 +157,88 @@ input:focus, textarea:focus { outline: none; border-color: #185FA5; }
       <div><label>Date de l'AG *</label><input type="date" id="date_ag"/></div>
     </div>
     <div class="row">
-      <div>
-        <label>Lieu (nom de la salle) * <span class="auto-tag">RTI</span></label>
-        <input type="text" id="lieu_nom" placeholder="Chargement..."/>
-      </div>
-      <div>
-        <label>Adresse du lieu * <span class="auto-tag">RTI</span></label>
-        <input type="text" id="lieu_adresse" placeholder="Chargement..."/>
-      </div>
+      <div><label>Lieu (nom de la salle) * <span class="auto-tag">RTI</span></label><input type="text" id="lieu_nom"/></div>
+      <div><label>Adresse du lieu * <span class="auto-tag">RTI</span></label><input type="text" id="lieu_adresse"/></div>
     </div>
     <div class="row">
       <div><label>Heure *</label><input type="time" id="heure" value="20:00"/></div>
-      <div>
-        <label>Président de séance * <span class="auto-tag">RTI</span></label>
-        <input type="text" id="president_seance"/>
-      </div>
+      <div><label>Président de séance * <span class="auto-tag">RTI</span></label><input type="text" id="president_seance"/></div>
     </div>
     <div class="row">
-      <div>
-        <label>Secrétaire de séance * <span class="auto-tag">RTI — année précédente</span></label>
-        <input type="text" id="secretaire_seance"/>
-      </div>
-      <div>
-        <label>Total membres actifs * <span class="auto-tag">RTI</span></label>
-        <input type="number" id="total_membres"/>
-      </div>
+      <div><label>Secrétaire de séance * <span class="auto-tag">RTI</span></label><input type="text" id="secretaire_seance"/></div>
+      <div><label>Total membres actifs * <span class="auto-tag">RTI</span></label><input type="number" id="total_membres"/></div>
     </div>
-
     <div style="margin-bottom:16px">
-      <label style="margin-bottom:8px;display:block">Membres présents * <span class="auto-tag">RTI</span> <span style="font-size:11px;color:#888">(cochez les présents)</span></label>
+      <label style="margin-bottom:8px;display:block">Membres présents * <span class="auto-tag">RTI</span></label>
       <div class="select-btns">
         <button onclick="toggleAll(true)">Tout sélectionner</button>
         <button onclick="toggleAll(false)">Tout désélectionner</button>
       </div>
-      <div class="members-grid" id="members-grid">
-        <span style="font-size:13px;color:#888">Chargement des membres...</span>
-      </div>
+      <div class="members-grid" id="members-grid"><span style="font-size:13px;color:#888">Chargement...</span></div>
     </div>
-
     <div class="card-title" style="margin-top:16px">AG Nationale (préfecture)</div>
     <div class="row">
-      <div><label>Lieu AG nationale *</label><input type="text" id="lieu_ag_nat" placeholder="ex: Saint-Gilles-les-Bains"/></div>
+      <div><label>Lieu AG nationale *</label><input type="text" id="lieu_ag_nat"/></div>
       <div><label>Date AG nationale *</label><input type="date" id="date_ag_nat"/></div>
     </div>
-
-    <div class="card-title" style="margin-top:16px">Bureau élu <span style="font-size:11px;color:#aaa;font-weight:normal;text-transform:none">(pré-rempli depuis RTI — tout est modifiable)</span></div>
-
+    <div class="card-title" style="margin-top:16px">Bureau élu <span style="font-size:11px;color:#aaa;font-weight:normal;text-transform:none">(pré-rempli RTI — modifiable)</span></div>
     <div class="row-3">
-      <div><label>Président — Nom Prénom <span class="auto-tag">RTI</span></label><input type="text" id="b_pres_nom"/></div>
+      <div><label>Président <span class="auto-tag">RTI</span></label><input type="text" id="b_pres_nom"/></div>
       <div><label>Profession <span class="auto-tag">RTI</span></label><input type="text" id="b_pres_prof"/></div>
       <div><label>Nationalité</label><input type="text" id="b_pres_nat" value="Française"/></div>
     </div>
-    <div style="margin-bottom:14px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_pres_addr"/></div>
-
+    <div style="margin-bottom:12px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_pres_addr"/></div>
     <div class="row-3">
-      <div><label>Vice-Président — Nom Prénom <span class="auto-tag">RTI</span></label><input type="text" id="b_vp_nom"/></div>
+      <div><label>Vice-Président <span class="auto-tag">RTI</span></label><input type="text" id="b_vp_nom"/></div>
       <div><label>Profession <span class="auto-tag">RTI</span></label><input type="text" id="b_vp_prof"/></div>
       <div><label>Nationalité</label><input type="text" id="b_vp_nat" value="Française"/></div>
     </div>
-    <div style="margin-bottom:14px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_vp_addr"/></div>
-
+    <div style="margin-bottom:12px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_vp_addr"/></div>
     <div class="row-3">
-      <div><label>Trésorier — Nom Prénom <span class="auto-tag">RTI</span></label><input type="text" id="b_tres_nom"/></div>
+      <div><label>Trésorier <span class="auto-tag">RTI</span></label><input type="text" id="b_tres_nom"/></div>
       <div><label>Profession <span class="auto-tag">RTI</span></label><input type="text" id="b_tres_prof"/></div>
       <div><label>Nationalité</label><input type="text" id="b_tres_nat" value="Française"/></div>
     </div>
-    <div style="margin-bottom:14px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_tres_addr"/></div>
-
+    <div style="margin-bottom:12px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_tres_addr"/></div>
     <div class="row-3">
-      <div><label>Secrétaire — Nom Prénom <span class="auto-tag">RTI</span></label><input type="text" id="b_sec_nom"/></div>
+      <div><label>Secrétaire <span class="auto-tag">RTI</span></label><input type="text" id="b_sec_nom"/></div>
       <div><label>Profession <span class="auto-tag">RTI</span></label><input type="text" id="b_sec_prof"/></div>
       <div><label>Nationalité</label><input type="text" id="b_sec_nat" value="Française"/></div>
     </div>
     <div style="margin-bottom:20px"><label>Adresse <span class="auto-tag">RTI</span></label><input type="text" id="b_sec_addr"/></div>
 
-    <button class="btn btn-success" id="btn-generate">Générer le PV</button>
+    <!-- SIGNATURES -->
+    <div class="card-title" style="margin-top:8px">Signatures</div>
+    <div class="row">
+      <div>
+        <div class="sig-label">Signature du Président de séance</div>
+        <canvas id="sig-pres" class="sig-box" width="380" height="120"></canvas>
+        <span class="sig-clear" onclick="clearSig('sig-pres')">Effacer</span>
+      </div>
+      <div>
+        <div class="sig-label">Signature du Secrétaire de séance</div>
+        <canvas id="sig-sec" class="sig-box" width="380" height="120"></canvas>
+        <span class="sig-clear" onclick="clearSig('sig-sec')">Effacer</span>
+      </div>
+    </div>
+
+    <div class="flex-gap" style="margin-top:16px">
+      <button class="btn btn-success" id="btn-generate">Générer le PV</button>
+    </div>
   </div>
 
-  <div class="hidden" id="pv-card">
-    <div class="flex-gap no-print" style="margin-bottom:12px">
+  <!-- BOUTONS PDF -->
+  <div class="hidden no-print" id="pv-actions">
+    <div class="flex-gap" style="margin-bottom:12px">
       <button class="btn btn-primary" onclick="window.print()">Imprimer / PDF</button>
-      <button class="btn btn-secondary" onclick="copyPV()">Copier le texte</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('pv-actions').classList.add('hidden');document.getElementById('form-card').classList.remove('hidden');">Modifier</button>
     </div>
-    <div id="pv-output"></div>
   </div>
+</div>
+
+<!-- PV PREVIEW (pour impression) -->
+<div id="pv-preview">
+  <div class="pv-page" id="pv-page-content"></div>
 </div>
 
 <script>
@@ -201,18 +260,16 @@ function initials(fn, ln) { return ((fn||'?')[0]+(ln||'?')[0]).toUpperCase(); }
 
 async function callProxy(path, method, body, token, baseUrl) {
   const res = await fetch(PROXY, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({path, method:method||'GET', body:body||null, token:token||'', baseUrl:baseUrl||APP_BASE})
   });
   return res;
 }
 
 async function getAllContacts() {
-  let results = [];
-  let path = '/contacts/?limit=100&offset=0';
+  let results = [], path = '/contacts/?limit=100&offset=0';
   while(path) {
-    const r = await callProxy(path, 'GET', null, adminToken, ADMIN_BASE);
+    const r = await callProxy(path,'GET',null,adminToken,ADMIN_BASE);
     const d = await r.json();
     results = results.concat(d.results||[]);
     path = d.next ? d.next.replace(ADMIN_BASE,'') : null;
@@ -220,300 +277,285 @@ async function getAllContacts() {
   return results;
 }
 
+// Signature pad
+function initSig(id) {
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: (src.clientX - rect.left) * (canvas.width/rect.width), y: (src.clientY - rect.top) * (canvas.height/rect.height) };
+  };
+  const start = (e) => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+  const draw = (e) => { e.preventDefault(); if(!drawing) return; const p = getPos(e); ctx.lineWidth=2; ctx.lineCap='round'; ctx.strokeStyle='#1a1a1a'; ctx.lineTo(p.x,p.y); ctx.stroke(); };
+  const stop = () => { drawing = false; };
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stop);
+  canvas.addEventListener('mouseleave', stop);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', draw, {passive:false});
+  canvas.addEventListener('touchend', stop);
+}
+
+function clearSig(id) {
+  const canvas = document.getElementById(id);
+  canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+}
+
+function getSigData(id) {
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext('2d');
+  const px = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  const hasDrawing = Array.from(px).some((v,i) => i%4===3 && v>0);
+  return hasDrawing ? canvas.toDataURL('image/png') : null;
+}
+
 window.addEventListener('load', () => {
+  initSig('sig-pres');
+  initSig('sig-sec');
   const t = localStorage.getItem('rti_admin_token');
   const u = localStorage.getItem('rti_username');
   if(t) document.getElementById('admin_token').value = t;
   if(u) document.getElementById('username').value = u;
+  if(t) { document.getElementById('step2').style.display='block'; setStatus('login-status','info','Token détecté. Entrez vos identifiants et chargez les données.'); }
+});
+
+document.getElementById('btn-step1').addEventListener('click', async () => {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if(!username||!password) { setStatus('login-status','err','Veuillez saisir vos identifiants.'); return; }
+  setStatus('login-status','info','Connexion en cours...');
+  document.getElementById('btn-step1').disabled = true;
+  try {
+    const r = await callProxy('/login/','POST',{username,password,sync_family:0},'',APP_BASE);
+    const data = await r.json();
+    if(!r.ok) { setStatus('login-status','err',data.error_message||'Identifiants incorrects.'); document.getElementById('btn-step1').disabled=false; return; }
+    globalToken = data.global_auth_token;
+    const lr = await callProxy('/my-levels/','GET',null,globalToken,APP_BASE);
+    const levels = await lr.json();
+    const subdomain = levels.club?.subdomain;
+    if(subdomain) document.getElementById('token-link').href = 'https://'+subdomain+'.roundtable.world/fr/admin/settings/api/token/';
+    document.getElementById('step1').style.display='none';
+    document.getElementById('step2').style.display='block';
+    setStatus('login-status','info','Connecté ! Créez maintenant votre token RTI ci-dessous.');
+  } catch(e) { setStatus('login-status','err','Erreur : '+e.message); document.getElementById('btn-step1').disabled=false; }
 });
 
 document.getElementById('btn-login').addEventListener('click', async () => {
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value.trim();
   adminToken = document.getElementById('admin_token').value.trim();
-  if(!username||!password) { setStatus('login-status','err','Veuillez saisir vos identifiants.'); return; }
-  if(!adminToken) { setStatus('login-status','err','Veuillez saisir votre token admin RTI.'); return; }
-  setStatus('login-status','info','Connexion en cours...');
-  document.getElementById('btn-login').disabled = true;
-  try {
-    const r = await callProxy('/login/', 'POST', {username, password, sync_family:0}, '', APP_BASE);
+  if(!adminToken) { setStatus('login-status','err','Veuillez coller votre token admin RTI.'); return; }
+  if(!globalToken) {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if(!username||!password) { setStatus('login-status','err','Veuillez saisir vos identifiants.'); return; }
+    const r = await callProxy('/login/','POST',{username,password,sync_family:0},'',APP_BASE);
     const data = await r.json();
-    if(!r.ok) {
-      setStatus('login-status','err', data.error_message||'Identifiants incorrects.');
-      document.getElementById('btn-login').disabled = false;
-      return;
-    }
+    if(!r.ok) { setStatus('login-status','err',data.error_message||'Identifiants incorrects.'); return; }
     globalToken = data.global_auth_token;
-    localStorage.setItem('rti_admin_token', adminToken);
-    localStorage.setItem('rti_username', username);
-    setStatus('login-status','info','Connecté ! Récupération des données...');
-    await loadAll();
-  } catch(e) {
-    setStatus('login-status','err','Erreur : '+e.message);
-    document.getElementById('btn-login').disabled = false;
   }
+  localStorage.setItem('rti_admin_token',adminToken);
+  localStorage.setItem('rti_username',document.getElementById('username').value.trim());
+  setStatus('login-status','info','Chargement des données...');
+  document.getElementById('btn-login').disabled=true;
+  await loadAll();
 });
 
 async function loadAll() {
   try {
-    // 1. Niveaux
     setStatus('login-status','info','Récupération du club...');
-    const lr = await callProxy('/my-levels/', 'GET', null, globalToken, APP_BASE);
+    const lr = await callProxy('/my-levels/','GET',null,globalToken,APP_BASE);
     const levels = await lr.json();
-    const club = levels.club;
-    clubData = club;
+    clubData = levels.club;
 
-    // 2. Détails club (bureau + meeting place)
     setStatus('login-status','info','Récupération du bureau et du lieu...');
-    const dr = await callProxy('/directory/'+club.id+'/', 'GET', null, globalToken, APP_BASE);
+    const dr = await callProxy('/directory/'+clubData.id+'/','GET',null,globalToken,APP_BASE);
     const dir = await dr.json();
-    boardData = dir.board || [];
+    boardData = dir.board||[];
 
-    // Extraire Meeting Place depuis details
-    const details = dir.details || {};
-    const cats = details.profile_categories || [];
-    const meetingCat = cats.find(c => c.category_name === 'Meeting Place');
-    if(meetingCat) {
-      const addr = meetingCat.values.find(v => v.name === 'Address')?.rendered_value || '';
-      const cp   = meetingCat.values.find(v => v.name === 'Postal Code')?.rendered_value || '';
-      const city = meetingCat.values.find(v => v.name === 'City')?.rendered_value || '';
+    const cats = (dir.details?.profile_categories)||[];
+    const mp = cats.find(c=>c.category_name==='Meeting Place');
+    if(mp) {
+      const addr = mp.values.find(v=>v.name==='Address')?.rendered_value||'';
+      const cp   = mp.values.find(v=>v.name==='Postal Code')?.rendered_value||'';
+      const city = mp.values.find(v=>v.name==='City')?.rendered_value||'';
       document.getElementById('lieu_nom').value = addr;
-      document.getElementById('lieu_adresse').value = [addr, cp, city].filter(Boolean).join(', ');
+      document.getElementById('lieu_adresse').value = [addr,cp,city].filter(Boolean).join(', ');
     }
 
-    // 3. Tous les contacts admin
     setStatus('login-status','info','Récupération des membres...');
     allMembers = await getAllContacts();
-    const actifs = allMembers.filter(m => m.rt_status === 'active');
+    const actifs = allMembers.filter(m=>m.rt_status==='active');
 
-    // 4. Afficher club
     document.getElementById('club-info').innerHTML = `
       <div style="display:flex;align-items:center;gap:12px">
-        ${club.logo?`<img src="${club.logo}" style="width:48px;height:48px;border-radius:8px;object-fit:contain;border:1px solid #eee"/>`:''}
+        ${clubData.logo?`<img src="${clubData.logo}" style="width:48px;height:48px;border-radius:8px;object-fit:contain;border:1px solid #eee"/>`:''}
         <div>
-          <div style="font-size:16px;font-weight:bold">${club.name}</div>
+          <div style="font-size:16px;font-weight:bold">${clubData.name}</div>
           <div style="font-size:13px;color:#888">${actifs.length} membres actifs</div>
         </div>
       </div>`;
 
     document.getElementById('board-info').innerHTML = boardData.length===0
-      ? '<span style="font-size:13px;color:#888">Aucun membre du bureau trouvé.</span>'
-      : boardData.map(m=>`
-        <div class="board-card">
-          <div class="avatar">${initials(m.first_name,m.last_name)}</div>
-          <div>
-            <div style="font-size:14px;font-weight:bold">${m.first_name||''} ${m.last_name||''}</div>
-            <div style="font-size:12px;color:#888">${m.function_name||''}</div>
-          </div>
-        </div>`).join('');
+      ? '<span style="font-size:13px;color:#888">Aucun bureau trouvé.</span>'
+      : boardData.map(m=>`<div class="board-card"><div class="avatar">${initials(m.first_name,m.last_name)}</div><div><div style="font-size:14px;font-weight:bold">${m.first_name||''} ${m.last_name||''}</div><div style="font-size:12px;color:#888">${m.function_name||''}</div></div></div>`).join('');
 
-    // 5. Total membres
     document.getElementById('total_membres').value = actifs.length;
     document.getElementById('date_ag').value = new Date().toISOString().split('T')[0];
 
-    // 6. Trouver contact admin par nom
-    const findContact = (m) => {
-      if(!m) return null;
-      return allMembers.find(c =>
-        c.first_name.toLowerCase().trim() === (m.first_name||'').toLowerCase().trim() &&
-        c.last_name.toLowerCase().trim() === (m.last_name||'').toLowerCase().trim()
-      );
-    };
+    const findContact = m => m ? allMembers.find(c=>c.first_name.toLowerCase().trim()===(m.first_name||'').toLowerCase().trim()&&c.last_name.toLowerCase().trim()===(m.last_name||'').toLowerCase().trim()) : null;
+    const getProf = c => { if(!c?.companies?.[0]) return ''; const j=c.companies[0]; return [j.function,j.name].filter(Boolean).join(' — '); };
+    const getAddr = c => { if(!c?.address?.[0]) return ''; const a=c.address[0]; return [a.street1,a.postal_code,a.city].filter(Boolean).join(', '); };
+    const find = (re,ex) => boardData.find(m=>{const f=(m.function_name||'').toLowerCase();return re.test(f)&&(!ex||!ex.test(f));});
 
-    const getProf = (c) => {
-      if(!c||!c.companies||!c.companies[0]) return '';
-      const j = c.companies[0];
-      return [j.function, j.name].filter(Boolean).join(' — ');
-    };
-    const getAddr = (c) => {
-      if(!c||!c.address||!c.address[0]) return '';
-      const a = c.address[0];
-      return [a.street1, a.postal_code, a.city].filter(Boolean).join(', ');
-    };
+    const pres=find(/pr[eé]sident|president/,/vice|past/);
+    const vp=find(/vice/);
+    const tres=find(/tr[eé]sorier|treasurer/);
+    const sec=find(/secr[eé]taire|secretary/);
+    const pastPres=find(/past.*pr[eé]sident|past.president/);
 
-    // 7. Trouver rôles bureau
-    const find = (re, ex) => boardData.find(m => {
-      const f = (m.function_name||'').toLowerCase();
-      return re.test(f) && (!ex||!ex.test(f));
-    });
-    const pres     = find(/pr[eé]sident|president/, /vice|past/);
-    const vp       = find(/vice/);
-    const tres     = find(/tr[eé]sorier|treasurer/);
-    const sec      = find(/secr[eé]taire|secretary/);
-    const pastPres = find(/past.*pr[eé]sident|past.president/);
+    const fillBureau=(m,p)=>{ if(!m)return; document.getElementById(p+'_nom').value=(m.first_name||'')+' '+(m.last_name||''); const c=findContact(m); if(c){document.getElementById(p+'_prof').value=getProf(c);document.getElementById(p+'_addr').value=getAddr(c);} };
+    fillBureau(pres,'b_pres'); fillBureau(vp,'b_vp'); fillBureau(tres,'b_tres'); fillBureau(sec,'b_sec');
+    if(pres) document.getElementById('president_seance').value=(pres.first_name||'')+' '+(pres.last_name||'');
+    const secSeance=pastPres||sec;
+    if(secSeance) document.getElementById('secretaire_seance').value=(secSeance.first_name||'')+' '+(secSeance.last_name||'');
 
-    // Secrétaire de séance = past-président ou past-secrétaire si dispo, sinon secrétaire actuel
-    const secSeance = pastPres || sec;
-
-    const fillBureau = (m, prefix) => {
-      if(!m) return;
-      document.getElementById(prefix+'_nom').value = (m.first_name||'')+' '+(m.last_name||'');
-      const c = findContact(m);
-      if(c) {
-        document.getElementById(prefix+'_prof').value = getProf(c);
-        document.getElementById(prefix+'_addr').value = getAddr(c);
-      }
-    };
-    fillBureau(pres, 'b_pres');
-    fillBureau(vp,   'b_vp');
-    fillBureau(tres, 'b_tres');
-    fillBureau(sec,  'b_sec');
-
-    if(pres) document.getElementById('president_seance').value = (pres.first_name||'')+' '+(pres.last_name||'');
-    if(secSeance) document.getElementById('secretaire_seance').value = (secSeance.first_name||'')+' '+(secSeance.last_name||'');
-
-    // 8. Grille membres
-    const grid = document.getElementById('members-grid');
-    grid.innerHTML = actifs
-      .sort((a,b) => a.last_name.localeCompare(b.last_name))
-      .map(m=>`
-        <label class="member-check" id="mc_${m.id}">
-          <input type="checkbox" value="${m.first_name} ${m.last_name}" onchange="this.closest('label').classList.toggle('checked',this.checked)"/>
-          <span>${m.first_name} ${m.last_name}</span>
-        </label>`).join('');
+    const grid=document.getElementById('members-grid');
+    grid.innerHTML=actifs.sort((a,b)=>a.last_name.localeCompare(b.last_name)).map(m=>`<label class="member-check" id="mc_${m.id}"><input type="checkbox" value="${m.first_name} ${m.last_name}" onchange="this.closest('label').classList.toggle('checked',this.checked)"/><span>${m.first_name} ${m.last_name}</span></label>`).join('');
 
     document.getElementById('club-card').classList.remove('hidden');
     document.getElementById('form-card').classList.remove('hidden');
-    setStatus('login-status','ok','✅ Toutes les données récupérées depuis RTI ! Vérifiez et complétez le formulaire.');
-  } catch(e) {
-    setStatus('login-status','err','Erreur : '+e.message);
-    document.getElementById('btn-login').disabled = false;
-  }
+    setStatus('login-status','ok','Toutes les données récupérées ! Vérifiez et complétez le formulaire.');
+  } catch(e) { setStatus('login-status','err','Erreur : '+e.message); document.getElementById('btn-login').disabled=false; }
 }
 
 function toggleAll(val) {
-  document.querySelectorAll('.member-check input[type=checkbox]').forEach(cb => {
-    cb.checked = val;
-    cb.closest('label').classList.toggle('checked', val);
-  });
+  document.querySelectorAll('.member-check input[type=checkbox]').forEach(cb=>{cb.checked=val;cb.closest('label').classList.toggle('checked',val);});
 }
-
 function getPresents() {
-  return [...document.querySelectorAll('.member-check input[type=checkbox]:checked')].map(cb => cb.value);
+  return [...document.querySelectorAll('.member-check input[type=checkbox]:checked')].map(cb=>cb.value);
 }
 
 function toLettre(n) {
   const u=['','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf'];
   const d=['','','vingt','trente','quarante','cinquante','soixante','soixante','quatre-vingt','quatre-vingt'];
-  if(n===0) return 'zéro';
-  if(n<20) return u[n];
+  if(n===0)return'zéro'; if(n<20)return u[n];
   const t=Math.floor(n/10),r=n%10;
-  if(t===7||t===9) return d[t]+'-'+u[10+r];
-  if(r===1&&t!==8) return d[t]+'-et-un';
-  if(r===0) return d[t]+(t===8?'s':'');
+  if(t===7||t===9)return d[t]+'-'+u[10+r];
+  if(r===1&&t!==8)return d[t]+'-et-un';
+  if(r===0)return d[t]+(t===8?'s':'');
   return d[t]+'-'+u[r];
 }
 function dateEnLettres(str) {
   const mois=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
   const [y,m,j]=str.split('-').map(Number);
-  return { jour:toLettre(j), mois:mois[m-1], annee:('deux mille '+(y>2000?toLettre(y-2000):'')).trim() };
+  return {jour:toLettre(j),mois:mois[m-1],annee:('deux mille '+(y>2000?toLettre(y-2000):'')).trim()};
 }
-function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-function heureEnLettres(s){ return toLettre(parseInt(s.split(':')[0]))+' heures'; }
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+function heureEnLettres(s){return toLettre(parseInt(s.split(':')[0]))+' heures';}
 
 document.getElementById('btn-generate').addEventListener('click', () => {
-  const g = id => document.getElementById(id).value.trim();
-  const rna=g('rna'), date_ag=g('date_ag'), lieu_nom=g('lieu_nom'), lieu_addr=g('lieu_adresse');
-  const heure=g('heure'), pres_s=g('president_seance'), sec_s=g('secretaire_seance');
-  const total=g('total_membres'), lieu_nat=g('lieu_ag_nat'), date_nat=g('date_ag_nat');
-  const presents = getPresents();
-
-  if(!rna||!date_ag||!lieu_nom||!lieu_addr||!pres_s||!sec_s||!total||presents.length===0||!lieu_nat||!date_nat) {
-    alert('Veuillez remplir tous les champs obligatoires (*) et cocher au moins un membre présent.');
-    return;
+  const g=id=>document.getElementById(id).value.trim();
+  const rna=g('rna'),date_ag=g('date_ag'),lieu_nom=g('lieu_nom'),lieu_addr=g('lieu_adresse');
+  const heure=g('heure'),pres_s=g('president_seance'),sec_s=g('secretaire_seance');
+  const total=g('total_membres'),lieu_nat=g('lieu_ag_nat'),date_nat=g('date_ag_nat');
+  const presents=getPresents();
+  if(!rna||!date_ag||!lieu_nom||!lieu_addr||!pres_s||!sec_s||!total||presents.length===0||!lieu_nat||!date_nat){
+    alert('Veuillez remplir tous les champs obligatoires et cocher au moins un membre présent.'); return;
   }
+  const d=dateEnLettres(date_ag),dn=dateEnLettres(date_nat);
+  const trNum=(clubData?.name.match(/\d+/))?.[0]||'???';
+  const trVille=clubData?clubData.name.replace(/table ronde fran[çc]aise?/i,'').replace(/n°?\s*\d+/i,'').replace(/[-–]/g,'').trim():'???';
+  const logoUrl=clubData?.logo||'https://upload.wikimedia.org/wikipedia/fr/thumb/3/3e/Logo_Table_Ronde_Fran%C3%A7aise.svg/200px-Logo_Table_Ronde_Fran%C3%A7aise.svg.png';
+  const sigPres=getSigData('sig-pres');
+  const sigSec=getSigData('sig-sec');
 
-  const d=dateEnLettres(date_ag), dn=dateEnLettres(date_nat);
-  const trNum = (clubData&&clubData.name.match(/\d+/)) ? clubData.name.match(/\d+/)[0] : '???';
-  const trVille = clubData ? clubData.name.replace(/table ronde fran[çc]aise?/i,'').replace(/n°?\s*\d+/i,'').replace(/[-–]/g,'').trim() : '???';
+  const bureauHTML=(titre,nom,prof,addr,nat)=>`
+    <tr><td>${titre}</td><td></td></tr>
+    <tr><td>Nom et Prénom</td><td>${nom||'___________'}</td></tr>
+    <tr><td>Profession</td><td>${prof||'___________'}</td></tr>
+    <tr><td>Adresse</td><td>${addr||'___________'}</td></tr>
+    <tr><td>Nationalité</td><td>${nat||'Française'}</td></tr>
+    <tr><td colspan="2" style="padding:4px"></td></tr>`;
 
-  const bPres=g('b_pres_nom'), bPresProf=g('b_pres_prof'), bPresAddr=g('b_pres_addr'), bPresNat=g('b_pres_nat');
-  const bVP=g('b_vp_nom'),     bVPProf=g('b_vp_prof'),     bVPAddr=g('b_vp_addr'),     bVPNat=g('b_vp_nat');
-  const bTres=g('b_tres_nom'), bTresProf=g('b_tres_prof'), bTresAddr=g('b_tres_addr'), bTresNat=g('b_tres_nat');
-  const bSec=g('b_sec_nom'),   bSecProf=g('b_sec_prof'),   bSecAddr=g('b_sec_addr'),   bSecNat=g('b_sec_nat');
+  const html=`
+    <div class="pv-header">
+      <div class="pv-header-left">
+        <img src="${logoUrl}" class="pv-header-logo" onerror="this.style.display='none'"/>
+        <div class="pv-header-title">
+          <h2>TABLE RONDE FRANÇAISE N° ${trNum}</h2>
+          <p>${trVille}</p>
+          <p>RNA : ${rna}</p>
+        </div>
+      </div>
+      <div class="pv-header-right">
+        <strong>Procès-Verbal d'AG</strong>
+        Du ${d.jour} ${d.mois} ${d.annee}<br>
+        ${lieu_nom}<br>
+        ${lieu_addr}
+      </div>
+    </div>
 
-  const pv =
-`L'An ${cap(d.annee)},
+    <div class="pv-doc-title">
+      <h1>Procès-Verbal d'Assemblée Générale</h1>
+    </div>
 
-Le ${cap(d.jour)} ${d.mois},
+    <div class="pv-body">
+      <p>L'An <strong>${cap(d.annee)}</strong>, le <strong>${cap(d.jour)} ${d.mois}</strong>, à <strong>${cap(heureEnLettres(heure))}</strong>, les membres de la Table Ronde Française n° ${trNum} – ${trVille} sont réunis à <strong>${lieu_nom}</strong>, ${lieu_addr}, conformément aux dispositions des statuts.</p>
 
-A ${cap(heureEnLettres(heure))},
+      <p>Il a été dressé une feuille de présence qui a été signée par chaque membre présent, au moment de son entrée en séance, tant à titre personnel qu'en qualité éventuelle de mandataire.</p>
 
-les membres de la Table Ronde Française n° ${trNum} – ${trVille} sont réunis à ${lieu_nom}, ${lieu_addr}, conformément aux dispositions des statuts.
+      <p><strong>Monsieur ${pres_s}</strong> préside la séance en sa qualité de Président de l'association.</p>
+      <p><strong>Monsieur ${sec_s}</strong> est désigné secrétaire de séance.</p>
 
-Il a été dressé une feuille de présence qui a été signée par chaque membre présent, au moment de son entrée en séance, tant à titre personnel qu'en qualité éventuelle de mandataire.
+      <p>Le Président constate que <strong>${presents.length} membres</strong> sont présents sur <strong>${total} membres actifs</strong>, et qu'en conséquence l'assemblée peut valablement délibérer.</p>
 
-Monsieur ${pres_s} préside la séance en sa qualité de Président de l'association.
+      <p><strong>Membres présents (${presents.length}) :</strong> ${presents.join(', ')}.</p>
 
-Monsieur ${sec_s} est désigné secrétaire de séance.
+      <p>Le Président dépose sur le bureau de l'assemblée et met à la disposition de ses membres : les statuts de l'association ; un exemplaire de la convocation de l'assemblée ; les candidatures reçues pour les postes à pourvoir au sein du bureau ; la feuille de présence certifiée exacte ; le numéro RNA de l'association : <strong>${rna}</strong>.</p>
 
-Le Président constate que ${presents.length} membres sont présents sur ${total} membres actifs, et qu'en conséquence l'assemblée peut valablement délibérer.
+      <p>Le Président déclare que tous les documents devant, d'après les dispositions légales, statutaires ou réglementaires, être communiqués aux membres de l'association avant la tenue de l'assemblée, l'ont été dans les délais imposés, ce dont l'assemblée lui donne acte.</p>
 
-Membres présents (${presents.length}) : ${presents.join(', ')}.
+      <p>Le Président rappelle que les mandats des membres du bureau actuel arrivent à échéance au terme de l'assemblée générale de la Table Ronde Française prévue à <strong>${lieu_nat}</strong> le <strong>${dn.jour} ${dn.mois} ${dn.annee}</strong>, qu'il a reçu les candidatures de différents Tablers aux postes à pourvoir, et qu'il convient que la présente assemblée procède aux élections conformément aux articles 19 et 20 des statuts.</p>
 
-Le Président dépose sur le bureau de l'assemblée et met à la disposition de ses membres :
-    - les statuts de l'association ;
-    - un exemplaire de la convocation de l'assemblée ;
-    - les candidatures reçues pour les postes à pourvoir au sein du bureau ;
-    - la feuille de présence certifiée exacte ;
-    - le numéro RNA de l'association : ${rna}.
+      <div class="section-title">RÉSOLUTIONS</div>
+      <div class="pv-resolution"><strong>Première résolution — Élection du bureau</strong><br>L'assemblée procède au vote pour l'élection des membres du nouveau bureau. Après dépouillement du scrutin, sont élus à l'unanimité des membres présents :</div>
 
-Le Président déclare que tous les documents devant, d'après les dispositions légales, statutaires ou réglementaires, être communiqués aux membres de l'association avant la tenue de l'assemblée, l'ont été dans les délais imposés, ce dont l'assemblée lui donne acte.
+      <table class="pv-bureau-table">
+        ${bureauHTML('PRÉSIDENT',g('b_pres_nom'),g('b_pres_prof'),g('b_pres_addr'),g('b_pres_nat'))}
+        ${bureauHTML('VICE-PRÉSIDENT',g('b_vp_nom'),g('b_vp_prof'),g('b_vp_addr'),g('b_vp_nat'))}
+        ${bureauHTML('TRÉSORIER',g('b_tres_nom'),g('b_tres_prof'),g('b_tres_addr'),g('b_tres_nat'))}
+        ${bureauHTML('SECRÉTAIRE',g('b_sec_nom'),g('b_sec_prof'),g('b_sec_addr'),g('b_sec_nat'))}
+      </table>
 
-Le Président rappelle que les mandats des membres du bureau actuel arrivent à échéance au terme de l'assemblée générale de la Table Ronde Française prévue à ${lieu_nat} le ${dn.jour} ${dn.mois} ${dn.annee}, qu'il a reçu les candidatures de différents Tablers aux postes à pourvoir, et qu'il convient que la présente assemblée procède aux élections conformément aux articles 19 et 20 des statuts.
+      <p>Cette résolution est adoptée à l'unanimité. L'ordre du jour étant épuisé, la séance est levée.</p>
+      <p>Fait à <strong>${lieu_nom}</strong>, le <strong>${d.jour} ${d.mois} ${d.annee}</strong>.</p>
 
-RÉSOLUTIONS
+      <div class="pv-signatures">
+        <div class="pv-sig-block">
+          <p>Le Président de séance</p>
+          ${sigPres?`<img src="${sigPres}"/>`:'<div style="height:70px"></div>'}
+          <div class="pv-sig-line">${pres_s}</div>
+        </div>
+        <div class="pv-sig-block">
+          <p>Le Secrétaire de séance</p>
+          ${sigSec?`<img src="${sigSec}"/>`:'<div style="height:70px"></div>'}
+          <div class="pv-sig-line">${sec_s}</div>
+        </div>
+      </div>
 
-Première résolution — Élection du bureau
+      <div class="pv-footer">
+        Table Ronde Française N° ${trNum} – ${trVille} · RNA ${rna} · Document généré le ${new Date().toLocaleDateString('fr-FR')}
+      </div>
+    </div>`;
 
-L'assemblée procède au vote pour l'élection des membres du nouveau bureau. Après dépouillement du scrutin, sont élus à l'unanimité des membres présents :
-
-Président :
-    Nom et Prénom   : ${bPres||'___________'}
-    Profession      : ${bPresProf||'___________'}
-    Adresse         : ${bPresAddr||'___________'}
-    Nationalité     : ${bPresNat||'Française'}
-
-Vice-Président :
-    Nom et Prénom   : ${bVP||'___________'}
-    Profession      : ${bVPProf||'___________'}
-    Adresse         : ${bVPAddr||'___________'}
-    Nationalité     : ${bVPNat||'Française'}
-
-Trésorier :
-    Nom et Prénom   : ${bTres||'___________'}
-    Profession      : ${bTresProf||'___________'}
-    Adresse         : ${bTresAddr||'___________'}
-    Nationalité     : ${bTresNat||'Française'}
-
-Secrétaire :
-    Nom et Prénom   : ${bSec||'___________'}
-    Profession      : ${bSecProf||'___________'}
-    Adresse         : ${bSecAddr||'___________'}
-    Nationalité     : ${bSecNat||'Française'}
-
-Cette résolution est adoptée à l'unanimité.
-
-L'ordre du jour étant épuisé, la séance est levée.
-
-Fait à ${lieu_nom}, le ${d.jour} ${d.mois} ${d.annee}.
-
-
-Le Président de séance,                              Le Secrétaire de séance,
-
-
-
-${pres_s}                                            ${sec_s}`;
-
-  document.getElementById('pv-output').textContent = pv;
-  document.getElementById('pv-card').classList.remove('hidden');
-  document.getElementById('pv-card').scrollIntoView({behavior:'smooth'});
+  document.getElementById('pv-page-content').innerHTML=html;
+  document.getElementById('pv-preview').style.display='block';
+  document.getElementById('pv-actions').classList.remove('hidden');
+  document.getElementById('form-card').classList.add('hidden');
+  document.getElementById('pv-actions').scrollIntoView({behavior:'smooth'});
 });
-
-function copyPV() {
-  navigator.clipboard.writeText(document.getElementById('pv-output').textContent)
-    .then(()=>alert('PV copié dans le presse-papiers !'));
-}
 </script>
 </body>
 </html>
